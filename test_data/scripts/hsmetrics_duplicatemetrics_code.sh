@@ -1,0 +1,1 @@
+java -jar picard.jar CollectHsMetrics COVERAGE_CAP=5000 I=sample.bam O=hs_metrics.txt R=/home/tomas/data/reference/hg19.with.mt.fasta BAIT_INTERVALS=pool1_pool2_nochr_3c.sort.merged.padded20.hg19.210311.met.annotated.interval_list  TARGET_INTERVALS=pool1_pool2_nochr_3c.sort.merged.padded20.hg19.210311.met.annotated.interval_list
