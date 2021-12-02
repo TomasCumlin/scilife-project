@@ -1,0 +1,4 @@
+# index bam file
+
+samtool index marked_dublicates.bam
+
