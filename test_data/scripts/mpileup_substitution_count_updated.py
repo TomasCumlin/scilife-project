@@ -1,6 +1,6 @@
 import os
 
-cmd = 'samtools mpileup -C50 -f reference/hg19.with.mt.fasta -r chr1 -l Twist_DNA_ST/pool1_pool2_nochr_3c.sort.merged.padded20.hg19.210311.met.annotated.bed marked_duplicates.bam'
+cmd = 'samtools mpileup -C50 -f reference/hg19.with.mt.fasta -l Twist_DNA_ST/pool1_pool2_nochr_3c.sort.merged.padded20.hg19.210311.met.annotated.bed marked_duplicates.bam'
 
 saving_here = os.popen(cmd).readlines()
 
