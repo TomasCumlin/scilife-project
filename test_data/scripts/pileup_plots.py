@@ -227,10 +227,8 @@ def plotting_subst(subst_data):
         c = subst_data_freq[-(i+1)]
         plt.bar(a,b,edgecolor="black",color=colors_double[i])
         plt.bar(a,c,edgecolor="black", bottom=b,color=colors_double[-(i+1)])
-        plt.text(a,b**1.05,("(" + subst_string[i]+ ")"),ha="center")
-        plt.text(a,b**1.2,f"{round(b*100,5)} %",ha="center")
-        plt.text(a,b+c**1.05,("(" + subst_string[-(i+1)] + ")"),ha="center")
-        plt.text(a,b+c**1.2,f"{round(c*100,5)} %",ha="center")
+        plt.text(a,b**1.2,f"{subst_string[i]}\n{round(b*100,5)} %",ha="center")
+        plt.text(a,b+c**1.2,f'{subst_string[-(i+1)]}\n{round(c*100,5)} %',ha="center")
         plt.text(a,b+c**0.994,f"total: {round((b+c)*100,5)}%",ha="center",fontsize = 10)
 
     plt.ylim(0,max(subst_data_freq)*2.1)
@@ -279,6 +277,47 @@ def trans_ratio(dicts_data_1, dicts_data_2,dicts_data_3,dicts_data_4):
     return ratio_counts, ratio_counts_freq
 
 
+def top_freq(dict_list):
+
+    dict_all = {}
+    dict_all_plot = {}
+
+    for i in range(int(len(dict_list)/2)):
+        for j,k in zip(dict_list[i].items(),list(reversed(sorted(dict_list[-(i+1)].items())))):
+            dict_all[f'{j[0]} and {k[0]}']=j[1]+k[1]
+            dict_all_plot[f'{j[0]} \n and \n {k[0]}']=j[1]+k[1]
+
+    dict_all_sorted = {k: v for k, v in sorted(dict_all.items(), key=lambda item: item[1], reverse=True)}
+    dict_all_plot_sorted = {k: v for k, v in sorted(dict_all_plot.items(), key=lambda item: item[1], reverse=True)}
+
+    f = open("sorted_subst_frequences.txt", "w")
+
+    for i in dict_all_sorted.items():
+        f.write(f'{i[0]} =    {i[1]}\n')
+
+    f.close
+
+    import matplotlib.pyplot as plt
+    counter=0
+
+    f = plt.figure()
+    f.set_figwidth(15)
+
+    for i in dict_all_plot_sorted.items():
+        counter +=1
+        plt.bar(i[0],i[1], edgecolor="black")
+        plt.text(i[0],i[1],f'{round(i[1],4)} %',ha="center")
+        if counter > 10:
+            break
+
+    plt.ylim(0,max(dict_all_sorted.values())*1.1)
+    plt.xlabel("Type of substitutions", fontsize=10)
+    plt.ylabel("Substitutions frequency",fontsize=10)
+    plt.title("Top substitution frequencies", fontsize=15)
+    plt.savefig('top_subst.png', bbox_inches='tight')
+
+
+# creating an pileup-output without actually creating a pileup-file, but instead saving it in the python script.
 
 cmd = 'samtools mpileup -C50 -f reference/hg19.with.mt.fasta -l Twist_DNA_ST/pool1_pool2_nochr_3c.sort.merged.padded20.hg19.210311.met.annotated.bed marked_duplicates.bam'
 
@@ -289,13 +328,20 @@ file_list=[i.split() for i in pileup_file]
 file_list.insert(0,(["C"]*len(file_list[1])))
 file_list.append(["C"]*len(file_list[1]))
 
+# obtaining dicts from the pileup data
 data_dicts = subst_dicts(file_list)
 
+# saves plots which shows distribution of substitution types.
 plotting_subst(data_dicts)
 
-plotting_subst_neighb(data_dicts[0])
+# saves plits which shows distribution of substitution types with all possible neghbours.
+#plotting_subst_neighb(data_dicts[0])
 plotting_subst_neighb(data_dicts[1], freq=True)
 
+#sorting top subst freq, saving them in txt-file and plotting top 10.
+top_freq(data_dicts[1])
 
+
+# calculates the transition/transversion ratio and prints it directly in the prompt.
 transition = trans_ratio(data_dicts[2], data_dicts[3], data_dicts[4], data_dicts[5])
 print(f'The transition/transversion ratio: {round(transition[0],4)} (counts) or {round(transition[1],4)} (frequency)')
