@@ -68,5 +68,5 @@ g.close()
 h = open("vc_check_summary.txt", "w")
 
 h.write('Summary' "\n")
-h.write("Detected variants: "+str(len(abundance_observed))+"\n"+ "Detected variants (%): " + str(len(abundance_observed)/len(known_vcs)*100)+ "\n")
-h.write("# Undetected variants: "+ str(len(un_detected))+"\n"+ "Detected variants (%): " + str(len(un_detected)/len(known_vcs)*100)+"\n")
+h.write("# Detected variants: "+str(len(abundance_observed))+"\n"+ "Detected variants (%): " + str(len(abundance_observed)/len(known_vcs[1:-1])*100)+ "\n")
+h.write("# Undetected variants: "+ str(len(un_detected))+"\n"+ "Undetected variants (%): " + str(len(un_detected)/len(known_vcs[1:-1])*100)+"\n")
