@@ -110,7 +110,7 @@ def subst_dicts(pileup_file):
                     bases_t_g[f'{i[2].upper()}T{k[2].upper()}->{i[2].upper()}G{k[2].upper()}']+=1
 
 
-    # converting counts to frequences and store them in other dicts.
+    # converting counts to frequencies and store them in other dicts.
 
     for i,j,k in zip(bases_a_c.items(),bases_a_g.items(),bases_a_t.items()):
         bases_a_c_freq[i[0]]=round(i[1]/reference_count[0]*100,14)
@@ -146,7 +146,7 @@ def subst_dicts(pileup_file):
     return subst_counts, subst_freq, transition, transversion, transition_freq, transversion_freq
 
 
-def plotting_subst_neighb(bases, freq=False):
+def plotting_subst_neighb(bases,batch_name,freq=False):
 
     import matplotlib.pyplot as plt
 
@@ -176,14 +176,14 @@ def plotting_subst_neighb(bases, freq=False):
         if freq is True:
             plt.ylabel("Substitutions(%)",fontsize=20)
             plt.title(f'Substitution frequencies for {subst_string[x]} and {subst_string[-(x+1)]}', fontsize=25)
-            plt.savefig(f'subst_neighbour_freq_{x}.png',bbox_inches='tight')
+            plt.savefig(f'subst_neighbour_freq_{batch_name}_{x}.png',bbox_inches='tight')
         else:
             plt.ylabel("# Substitutions",fontsize=20)
             plt.title(f'Substitution count for {subst_string[x]} and {subst_string[-(x+1)]}', fontsize=25)
-            plt.savefig(f'subst_neighbour_{x}.png',bbox_inches='tight')
+            plt.savefig(f'subst_neighbour_{batch_name}_{x}.png',bbox_inches='tight')
 
 
-def plotting_subst(subst_data):
+def plotting_subst(subst_data,batch_name):
 
     import matplotlib.pyplot as plt
     import numpy as np
@@ -215,8 +215,8 @@ def plotting_subst(subst_data):
     plt.ylim(0,max(subst_data_list)*2.1)
     plt.xlabel("Type of substitutions", fontsize=10)
     plt.ylabel("# Substitutions",fontsize=10)
-    plt.title("Substitution count", fontsize=15)
-    plt.savefig(f'subst_count',bbox_inches='tight')
+    plt.title(f"Substitution Counts", fontsize=13)
+    plt.savefig(f'subst_count_{batch_name}',bbox_inches='tight')
 
     f = plt.figure()
     f.set_figwidth(10)
@@ -227,15 +227,15 @@ def plotting_subst(subst_data):
         c = subst_data_freq[-(i+1)]
         plt.bar(a,b,edgecolor="black",color=colors_double[i])
         plt.bar(a,c,edgecolor="black", bottom=b,color=colors_double[-(i+1)])
-        plt.text(a,b**1.2,f"{subst_string[i]}\n{round(b*100,5)} %",ha="center")
-        plt.text(a,b+c**1.2,f'{subst_string[-(i+1)]}\n{round(c*100,5)} %',ha="center")
-        plt.text(a,b+c**0.994,f"total: {round((b+c)*100,5)}%",ha="center",fontsize = 10)
+        plt.text(a,b**1.2,f"{subst_string[i]}\n{round(b,5)} %",ha="center")
+        plt.text(a,b+c**1.2,f'{subst_string[-(i+1)]}\n{round(c,5)} %',ha="center")
+        plt.text(a,b+c**0.994,f"total: {round((b+c),5)}%",ha="center",fontsize = 10)
 
     plt.ylim(0,max(subst_data_freq)*2.1)
     plt.xlabel("Type of substitutions", fontsize=10)
     plt.ylabel("# Substitution (%)",fontsize=10)
     plt.title("Substitution Frequencies", fontsize=15)
-    plt.savefig(f'subst_freq',bbox_inches='tight')
+    plt.savefig(f'subst_freq_{batch_name}',bbox_inches='tight')
 
     f = plt.figure()
     f.set_figwidth(10)
@@ -250,7 +250,7 @@ def plotting_subst(subst_data):
     plt.xlabel("Type of substitutions", fontsize=10)
     plt.ylabel("# Substitutions",fontsize=10)
     plt.title("Substitution count", fontsize=15)
-    plt.savefig(f'subst_count_plain',bbox_inches='tight')
+    plt.savefig(f'subst_count_plain_{batch_name}',bbox_inches='tight')
 
 def trans_ratio(dicts_data_1, dicts_data_2,dicts_data_3,dicts_data_4):
 
@@ -277,7 +277,7 @@ def trans_ratio(dicts_data_1, dicts_data_2,dicts_data_3,dicts_data_4):
     return ratio_counts, ratio_counts_freq
 
 
-def top_freq(dict_list):
+def top_freq(dict_list, batch_name):
 
     dict_all = {}
     dict_all_plot = {}
@@ -314,8 +314,10 @@ def top_freq(dict_list):
     plt.xlabel("Type of substitutions", fontsize=10)
     plt.ylabel("Substitutions frequency",fontsize=10)
     plt.title("Top substitution frequencies", fontsize=15)
-    plt.savefig('top_subst.png', bbox_inches='tight')
+    plt.savefig('top_subst_{batch_name}.png', bbox_inches='tight')
 
+# batch is attached to all file_names to make them unique
+batch=sys.argv[1]
 
 # creating an pileup-output without actually creating a pileup-file, but instead saving it in the python script.
 
@@ -332,16 +334,28 @@ file_list.append(["C"]*len(file_list[1]))
 data_dicts = subst_dicts(file_list)
 
 # saves plots which shows distribution of substitution types.
-plotting_subst(data_dicts)
+plotting_subst(data_dicts, batch)
 
 # saves plits which shows distribution of substitution types with all possible neghbours.
 #plotting_subst_neighb(data_dicts[0])
-plotting_subst_neighb(data_dicts[1], freq=True)
+plotting_subst_neighb(data_dicts[1],batch,freq=True)
 
 #sorting top subst freq, saving them in txt-file and plotting top 10.
-top_freq(data_dicts[1])
+top_freq(data_dicts[1],batch)
 
 
-# calculates the transition/transversion ratio and prints it directly in the prompt.
+# calculates the transition/transversion ratio (based on counts and frequencies, respectively)
 transition = trans_ratio(data_dicts[2], data_dicts[3], data_dicts[4], data_dicts[5])
-print(f'The transition/transversion ratio: {round(transition[0],4)} (counts) or {round(transition[1],4)} (frequency)')
+
+h = open(f'trans_ratio_{batch}.txt', "w")
+
+h.write(f'{str(transition[0])} {str(transition[1])}')
+
+# save substitution counts and frequencies in a text-file
+
+f = open(f'counts_frequencies_{batch}.txt', "w")
+
+for i,j in zip(data_dicts[0],data_dicts[1]):
+    for x,y,z in zip(i.keys(),i.values(),j.values()):
+        f.write(f'{str(x)} {str(y)} {str(z)}\n')
+f.close()
