@@ -290,7 +290,7 @@ def top_freq(dict_list, batch_name):
     dict_all_sorted = {k: v for k, v in sorted(dict_all.items(), key=lambda item: item[1], reverse=True)}
     dict_all_plot_sorted = {k: v for k, v in sorted(dict_all_plot.items(), key=lambda item: item[1], reverse=True)}
 
-    f = open("sorted_subst_frequences.txt", "w")
+    f = open(f"sorted_subst_frequences_{batch_name}.txt", "w")
 
     for i in dict_all_sorted.items():
         f.write(f'{i[0]} =    {i[1]}\n')
@@ -314,14 +314,14 @@ def top_freq(dict_list, batch_name):
     plt.xlabel("Type of substitutions", fontsize=10)
     plt.ylabel("Substitutions frequency",fontsize=10)
     plt.title("Top substitution frequencies", fontsize=15)
-    plt.savefig('top_subst_{batch_name}.png', bbox_inches='tight')
+    plt.savefig(f'top_subst_{batch_name}.png', bbox_inches='tight')
 
 # batch is attached to all file_names to make them unique
 batch=sys.argv[1]
 
 # creating an pileup-output without actually creating a pileup-file, but instead saving it in the python script.
 
-cmd = 'samtools mpileup -C50 -f reference/hg19.with.mt.fasta -l Twist_DNA_ST/pool1_pool2_nochr_3c.sort.merged.padded20.hg19.210311.met.annotated.bed marked_duplicates.bam'
+cmd = 'samtools mpileup -C50 -f reference/hg19.with.mt.fasta -l Twist_DNA_ST/pool1_pool2_nochr_3c.sort.merged.padded20.hg19.210311.met.annotated.bed left_5.bam'
 
 pileup_file = os.popen(cmd).readlines()
 

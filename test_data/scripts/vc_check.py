@@ -45,7 +45,9 @@ for i in known_vcs_dict.items():
     elif i[0] not in detected_variants.keys():
         un_detected[i[0]]=i[1]
 
-f = open("vc_check_detected.txt", "w")
+batch = sys.argv[3]
+
+f = open(f'vc_check_detected_{batch}.txt', "w")
 
 f.write('Detected variants')
 f.write("\n" f'Location Expected abundance Observed Abundance Difference(%)'"\n")
@@ -56,7 +58,7 @@ for i,j,k in zip(abundance_expected.items(), abundance_observed.items(), differe
 f.close()
 
 
-g = open("vc_check_undetected.txt", "w")
+g = open(f"vc_check_undetected_{batch}.txt", "w")
 
 g.write('Undetected variants')
 g.write("\n" f'Location Expected abundance'"\n")
@@ -65,7 +67,7 @@ for i in un_detected.items():
 
 g.close()
 
-h = open("vc_check_summary.txt", "w")
+h = open(f"vc_check_summary_{batch}.txt", "w")
 
 h.write('Summary' "\n")
 h.write("# Detected variants: "+str(len(abundance_observed))+"\n"+ "Detected variants (%): " + str(len(abundance_observed)/len(known_vcs[1:-1])*100)+ "\n")
