@@ -1,0 +1,1 @@
+BAM-file (sample.bam) has been trimmed with 5 bp from the left.
