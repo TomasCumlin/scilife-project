@@ -1,0 +1,1 @@
+Results where no trimming or filtering have been done to the data.
