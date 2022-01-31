@@ -1,0 +1,1 @@
+Fastq files have been trimmed fron the front, 5 bp. 
