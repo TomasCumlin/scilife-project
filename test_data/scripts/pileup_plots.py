@@ -233,7 +233,7 @@ def plotting_subst(subst_data,batch_name):
 
     plt.ylim(0,max(subst_data_freq)*2.1)
     plt.xlabel("Type of substitutions", fontsize=10)
-    plt.ylabel("# Substitution (%)",fontsize=10)
+    plt.ylabel("Substitution (%)",fontsize=10)
     plt.title("Substitution Frequencies", fontsize=15)
     plt.savefig(f'subst_freq_{batch_name}',bbox_inches='tight')
 
@@ -279,16 +279,118 @@ def trans_ratio(dicts_data_1, dicts_data_2,dicts_data_3,dicts_data_4):
 
 def top_freq(dict_list, batch_name):
 
+    from collections import OrderedDict
+
+    color_list = ("#ADE05B",
+    "#FB05DF",
+    "#E091DF",
+    "#E64427",
+    "#0C4155",
+    "#93A4A4",
+    "#530FEC",
+    "#A6FA03",
+    "#73D6B2",
+    "#8161FA",
+    "#AE944C",
+    "#A20AF2",
+    "#6E628F",
+    "#A31F6F",
+    "#164E4B",
+    "#984075",
+    "#CE563E",
+    "#196A76",
+    "#0B4B66",
+    "#715A25",
+    "#4FC70D",
+    "#2B22E1",
+    "#ED4A19",
+    "#9C7468",
+    "#8BE192",
+    "#43D57B",
+    "#50C50C",
+    "#894EF4",
+    "#D63071",
+    "#184052",
+    "#3723EE",
+    "#3ABDC3",
+    "#60465D",
+    "#2D79DB",
+    "#C5BCFF",
+    "#933536",
+    "#C2EF32",
+    "#C5F7F9",
+    "#D9EB8C",
+    "#81752F",
+    "#5E1074",
+    "#4B4726",
+    "#A43377",
+    "#24F2FE",
+    "#B9F6B6",
+    "#6630F8",
+    "#35C91E",
+    "#CB52D7",
+    "#E744BC",
+    "#BF63E0",
+    "#880EF9",
+    "#AB7C48",
+    "#020925",
+    "#3C2F35",
+    "#A40D42",
+    "#8A26EC",
+    "#B5672E",
+    "#199581",
+    "#8D2EAF",
+    "#0BE879",
+    "#40583C",
+    "#01BE52",
+    "#7C1E54",
+    "#D2E6CE",
+    "#1CDCAF",
+    "#EF3651",
+    "#7945FF",
+    "#005D84",
+    "#954BAE",
+    "#117144",
+    "#6FE57F",
+    "#F5332E",
+    "#C86A2D",
+    "#6C0B9A",
+    "#74363F",
+    "#013D93",
+    "#E0B8F0",
+    "#99555E",
+    "#B3DF4E",
+    "#7ABC11",
+    "#E2F6FC",
+    "#25DF12",
+    "#4711AE",
+    "#78684C",
+    "#0728A8",
+    "#5D745E",
+    "#9D8DD2",
+    "#49220D",
+    "#BA4893",
+    "#1727DC",
+    "#31BE45",
+    "#593B78",
+    "#8E4E6A",
+    "#7877DF",
+    "#640E8E",
+    "#54B9EA")
+
     dict_all = {}
     dict_all_plot = {}
+    colors = {}
 
     for i in range(int(len(dict_list)/2)):
-        for j,k in zip(dict_list[i].items(),list(reversed(sorted(dict_list[-(i+1)].items())))):
+        for j,k,l in zip(dict_list[i].items(),list(reversed(sorted(dict_list[-(i+1)].items()))),color_list):
             dict_all[f'{j[0]} and {k[0]}']=j[1]+k[1]
             dict_all_plot[f'{j[0]} \n and \n {k[0]}']=j[1]+k[1]
+            colors[f'{j[0]} \n and \n {k[0]}']=l
 
     dict_all_sorted = {k: v for k, v in sorted(dict_all.items(), key=lambda item: item[1], reverse=True)}
     dict_all_plot_sorted = {k: v for k, v in sorted(dict_all_plot.items(), key=lambda item: item[1], reverse=True)}
+    colors_sorted = OrderedDict([(el, colors[el]) for el in dict_all_plot_sorted])
 
     f = open(f"sorted_subst_frequences_{batch_name}.txt", "w")
 
@@ -303,9 +405,9 @@ def top_freq(dict_list, batch_name):
     f = plt.figure()
     f.set_figwidth(15)
 
-    for i in dict_all_plot_sorted.items():
+    for i,j in zip(dict_all_plot_sorted.items(), colors_sorted.items()):
         counter +=1
-        plt.bar(i[0],i[1], edgecolor="black")
+        plt.bar(i[0],i[1], edgecolor="black", color=j[1])
         plt.text(i[0],i[1],f'{round(i[1],4)} %',ha="center")
         if counter > 10:
             break
@@ -321,14 +423,14 @@ batch=sys.argv[1]
 
 # creating an pileup-output without actually creating a pileup-file, but instead saving it in the python script.
 
-cmd = 'samtools mpileup -C50 -f reference/hg19.with.mt.fasta -l Twist_DNA_ST/pool1_pool2_nochr_3c.sort.merged.padded20.hg19.210311.met.annotated.bed left_5.bam'
+cmd = 'samtools mpileup -C50 -f reference/hg19.with.mt.fasta -l Twist_DNA_ST/pool1_pool2_nochr_3c.sort.merged.padded20.hg19.210311.met.annotated.bed out.bam -Q 0'
 
 pileup_file = os.popen(cmd).readlines()
 
 file_list=[i.split() for i in pileup_file]
 
-file_list.insert(0,(["C"]*len(file_list[1])))
-file_list.append(["C"]*len(file_list[1]))
+#file_list.insert(0,(["C"]*len(file_list[1])))
+#file_list.append(["C"]*len(file_list[1]))
 
 # obtaining dicts from the pileup data
 data_dicts = subst_dicts(file_list)
