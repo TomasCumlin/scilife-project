@@ -1,0 +1,1 @@
+Data has not been trimmed. The difference between this and run_1 is that this one had Q=0 in mpileup.
