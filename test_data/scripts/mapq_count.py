@@ -48,9 +48,9 @@ f.set_figheight(10)
 
 plt.bar(x, cumulative_counts, log=True, align='center', edgecolor="black")
 plt.gca().set_xticks(x)
-plt.xlabel("# Cumulative mapq-values (%)", fontsize=30)
-plt.ylabel("# Reads (log scale)",fontsize=30)
-plt.title("Mapq-value frequency, cumulative", fontsize=50, pad=90)
+plt.xlabel("# Cumulative Mapq-values", fontsize=30)
+plt.ylabel("# Reads (%) - log scale",fontsize=30)
+plt.title("Mapq-value Frequency, Cumulative", fontsize=50, pad=90)
 #plt.gca().invert_xaxis()
 
 for i,j in zip(x,cumulative_counts):

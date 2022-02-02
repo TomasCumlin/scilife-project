@@ -38,8 +38,8 @@ cumulative_counts = np.cumsum(x_counts[::-1])
 
 plt.bar(x, cumulative_counts[::-1], log=True, align='center', edgecolor="black")
 plt.gca().set_xticks(x)
-plt.xlabel("# Cumulative substitutions", fontsize=30)
-plt.ylabel("# Reads (log scale)",fontsize=30)
+plt.xlabel("# Cumulative Substitutions", fontsize=30)
+plt.ylabel("Reads (%) - log scale",fontsize=30)
 plt.title("Reads with number of substitutions, cumulative", fontsize=50, pad=90)
 plt.gca().invert_xaxis()
 
