@@ -1,0 +1,1 @@
+Data is untrimmed and BAM-file has been filtered with 8 subst and more. 
