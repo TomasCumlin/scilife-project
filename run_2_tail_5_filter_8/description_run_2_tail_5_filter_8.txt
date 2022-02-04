@@ -1,0 +1,1 @@
+Data has been trimmed 5 bp from the tail and reads with 8 or more substs are filtered out. 
