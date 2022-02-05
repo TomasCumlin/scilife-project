@@ -1,0 +1,5 @@
+Summary
+# Detected variants: 117
+Detected variants (%): 56.79611650485437
+# Undetected variants: 89
+Undetected variants (%): 43.203883495145625
