@@ -1,0 +1,1 @@
+Data has been trimmed from tail 5bp and filtered reads of 5 or more subst.
