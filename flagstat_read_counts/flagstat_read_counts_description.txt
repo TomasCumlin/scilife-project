@@ -1,0 +1,1 @@
+Collection of all counted reads in bam files using Samtools flagstat.
