@@ -1,0 +1,1 @@
+Untrimmed file was filtered of all reads with a mapq value of 0.
