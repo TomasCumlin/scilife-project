@@ -1,0 +1,1 @@
+Data with mapq 40 and more are removed. 
