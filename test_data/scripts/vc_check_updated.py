@@ -88,10 +88,12 @@ h.write("# Undetected variants: "+ str(len(un_detected))+"\n"+ "Undetected varia
 
 h.close()
 
-#plotting everything
+
+#plotting the polynomial regression and gives the Coefficient of determination R2
 import matplotlib.pyplot as plt
 from numpy.polynomial.polynomial import polyfit
 from sklearn.metrics import r2_score
+from scipy.stats.stats import pearsonr
 
 observed_axis = []
 expected_axis = []
@@ -113,5 +115,17 @@ plt.plot(observed_axis, reg, '-')
 plt.xlabel(f"Observed Abundance (%) of Batch {batch}")
 plt.ylabel("Expected Abundance (%)")
 plt.title("Expected vs Observed Variant Abundance", fontsize=15)
-plt.text(min(observed_axis), max(expected_axis),f"r2={round(r2,3)}",fontsize=12)
+t=plt.text(min(observed_axis), max(expected_axis)*0.95,f"R2={round(r2,3)}",fontsize=12)
+t.set_bbox(dict(facecolor='0.95'))
+plt.savefig(f'vc_check_regression_{batch}.png',bbox_inches='tight')
+
+plt.scatter(observed_axis,expected_axis, color="r", alpha=0.5, edgecolors="red")   
+plt.plot(observed_axis, reg, '-',alpha=0.8,color="darkblue")
+plt.xlabel("Observed Abundance (%) of batch tail_5_filtered_8")
+plt.ylabel("Expected Abundance (%)")
+plt.title("Expected vs Observed Variant Abundance", fontsize=15)
+t=plt.text(min(observed_axis), max(expected_axis)*0.95,f"r2={round(pearsons[0],3)}",fontsize=12)
+t.set_bbox(dict(facecolor='0.95'))
+t=plt.text(min(observed_axis), max(expected_axis)*0.85,f"p-value={pearsons[1]}",fontsize=12)
+t.set_bbox(dict(facecolor='0.95'))
 plt.savefig(f'vc_check_correlation_{batch}.png',bbox_inches='tight')
