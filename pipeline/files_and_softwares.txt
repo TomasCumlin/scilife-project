@@ -1,0 +1,36 @@
+Software:
+Fastp
+Samtools
+BWA
+MultiQC
+Gatk4
+Mpileup
+
+
+File list:
+
+pipeline.sh
+
+    01_create_bam.sh
+      markduplicates_code.sh
+      hsmetrics_duplicatemetrics_code.sh
+
+    subst_count_2.py
+    mapq_counts.py
+
+    filtersamreads.sh
+      sam_test.py
+
+    filter_sam_mapq_2.sh
+      filter_sam_mapq_2.py
+
+    vc_gatk4.sh
+      vc_check_updated.py
+
+    pileup_plots_updated.py
+
+
+
+Not included in the pipeline:
+mosedepth.sh
+coverage.py
