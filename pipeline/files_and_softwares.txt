@@ -1,6 +1,7 @@
 Software:
 Fastp
 Samtools
+Picard
 BWA
 MultiQC
 Gatk4
